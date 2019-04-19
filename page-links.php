@@ -226,7 +226,7 @@ $this->need('header.php'); ?>
                         }
                     ?>
                     <?php     
-                        $constr = replace_friend_links($this->content());
+                        $constr = replace_friend_links($this->content);
                         if (!empty($this->options->switch) && in_array('PanguPHP', $this->options->switch)) {
                             //print pangu($this->content);
                             print pangu($constr);

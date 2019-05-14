@@ -21,6 +21,7 @@ share:
     toGplus: "Share to Google+"
     toWeibo: "Share to Weibo"
     toQQ: "Share to QQ"
+    toQzone: "Share to QQ Zone"
 title:
     category: "Categories"
     tag: "Tag"

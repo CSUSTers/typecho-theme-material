@@ -21,6 +21,7 @@ share:
     toGplus: "分享到 Google+"
     toWeibo: "分享到微博"
     toQQ: "分享到 QQ"
+    toQzone: "分享到 QQ 空间"
 title:
     category: "分類"
     tag: "標籤"

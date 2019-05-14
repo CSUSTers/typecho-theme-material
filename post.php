@@ -103,6 +103,11 @@
                                 <?php lang("share.toWeibo") ?>
                                 </li>
                             </a>
+                            <a class="md-menu-list-a" href="https://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?url=<?php $this->permalink(); ?>&sharesource=qzone&title=<?php $this->title(); ?>&pics=<?php echo showThumbnail($this); ?>&summary=By%20<?php $this->author(); ?>">
+                                <li class="mdl-menu__item">
+                                <?php lang("share.toQzone") ?>
+                                </li>
+                            </a>
                         </ul>
                     </div>
 

@@ -193,7 +193,7 @@ $this->need('header.php'); ?>
                                 <?php lang("share.toGplus") ?>
                                 </li>
                             </a>
-                            <a class="md-menu-list-a" href="http://service.weibo.com/share/share.php?appkey=&title=<?php $this->title(); ?>&url=<?php $this->permalink(); ?>&pic=&searchPic=false&style=simple ">
+                            <a class="md-menu-list-a" href="https://service.weibo.com/share/share.php?appkey=&title=<?php $this->title(); ?>&url=<?php $this->permalink(); ?>&pic=&searchPic=false&style=simple ">
                                 <li class="mdl-menu__item">
                                 <?php lang("share.toWeibo") ?>
                                 </li>

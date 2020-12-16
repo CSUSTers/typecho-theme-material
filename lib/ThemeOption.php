@@ -55,8 +55,8 @@ function themeConfig($form) {
                 [0 => "LWL12 ( api.lwl12.com )",
                 1 => "journey.ad ( api.imjad.cn )",
                 2 => "Google Chart ( chart.googleapis.com )",
-                3 => "豌豆荚 ( www.wandoujia.com/api/qr )",
-                "false" => "不显示二维码"], 0)
+                3 => "豌豆荚 ( www.wandoujia.com )",
+                -1 => "不显示二维码"], 1)
             ).
             $Render->panel("item", "搜索设置", NULL,
                 $Render->radio("searchis", "搜索设置", NULL, [0 => "Typecho 原生搜索", 1 => "本地搜索（即时搜索）"], 1)
@@ -127,9 +127,6 @@ function themeConfig($form) {
             $Render->panel("item", "网站统计代码", NULL,
                 $Render->textarea("analysis", "网站统计代码", "填入如 Google Analysis 的第三方统计代码", NULL)
             ).
-            $Render->panel("item", "文章底部 Adsense", NULL,
-                $Render->textarea("adsense", "文章底部 Adsense", "填入 Google Adsense 的广告代码", NULL)
-            ).
             $Render->panel("item", "DNS 预加载", NULL,
                 $Render->textarea("DNSPrefetch", "DNS 预加载", "一行一个，如 <b>//dns.example.com</b>", NULL)
             )
@@ -176,7 +173,12 @@ function themeConfig($form) {
                     $Render->radio("ThumbnailOption", "缩略图显示效果", NULL, 
                     [1 => "显示文章内第一张图片或指定的图片 (若无图片则显示随机图)",
                     2 => "只显示纯色",
-                    3 => "只显示随机图片"], 1)
+                    3 => "只显示随机图片"], 1).
+                    $Render->radio('FetchFirstImageRegex', '通过正则匹配文章内图片（仅当选择第一项时有效）', null,
+                    [
+                        0 => '开启',
+                        1 => '关闭'
+                    ])
                 ).
                 $Render->panel("item", "缩略图为纯色时的颜色", NULL,
                     $Render->input("TitleColor", "缩略图为纯色时的颜色", "缩略图为纯色时的颜色", "#FFF")
@@ -235,7 +237,7 @@ function themeConfig($form) {
         ).
         $Render->panel("item", "工具箱", '那点零零碎碎的小工具', '
 <div class="mdui-list">
-  <a href="'.Typecho_Widget::widget('Widget_Options')->siteUrl.'?mod=expert&type=comments" class="mdui-list-item mdui-ripple">导出评论（以 WXR 格式）</a>
+  <a href="'.Typecho_Widget::widget('Widget_Options')->siteUrl.'?mod=export&type=comments" class="mdui-list-item mdui-ripple">导出评论（以 WXR 格式）</a>
 </div>
         ')
     );

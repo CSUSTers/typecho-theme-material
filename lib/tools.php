@@ -1,6 +1,6 @@
 <?php
 
-Class Comment_Expert {
+class Comment_Export {
     protected $struct = '<?xml version="1.0" encoding="UTF-8"?>
       <!-- This is a WordPress eXtended RSS file generated from Typecho by idawnlight/typecho-theme-material as an export of comments of your site. -->
 <rss version="2.0"
@@ -16,7 +16,6 @@ Class Comment_Expert {
     protected $wxr;
 
     protected $post_blocks;
-    protected $comments_blocks;
 
     public function getResult() {
         $content = $this->wxr->asXML();
@@ -57,15 +56,14 @@ Class Comment_Expert {
     }
 }
 
-Class SimpleXMLElementExtended extends SimpleXMLElement {
-
+class SimpleXMLElementExtended extends SimpleXMLElement {
     /**
      * Adds a child with $value inside CDATA
+     * https://stackoverflow.com/a/20511976
      * @param string $name
      * @param string $value
      * @param string $namespace
      * @return SimpleXMLElement
-     * https://stackoverflow.com/questions/6260224/how-to-write-cdata-using-simplexmlelement
      */
     public function addChildWithCDATA($name, $value = NULL, $namespace = null) {
         $new_child = $this->addChild($name, null, $namespace);
@@ -80,7 +78,7 @@ Class SimpleXMLElementExtended extends SimpleXMLElement {
     }
 }
 
-Class arrayToClass {
+class arrayToClass {
     private $_data;
 
     public function __construct(array $properties = []){

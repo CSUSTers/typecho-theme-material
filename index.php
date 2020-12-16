@@ -4,7 +4,7 @@
  *
  * @package Material
  * @author 黎明余光
- * @version 3.3.4
+ * @version 3.4.0
  * @link https://blog.lim-light.com
  */
 
@@ -161,13 +161,6 @@ $this->need('header.php'); ?>
                                 </li>
                             </a>
                             <a class="index_share-link"
-                               href="https://plus.google.com/share?url=<?php $this->options->siteUrl(); ?>"
-                               onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
-                                <li class="mdl-menu__item">
-                                    <?php lang("share.toGplus") ?>
-                                </li>
-                            </a>
-                            <a class="index_share-link"
                                href="http://service.weibo.com/share/share.php?appkey=&title=<?php $this->options->title(); ?>&url=<?php $this->options->siteUrl(); ?>&pic=&searchPic=false&style=simple ">
                                 <li class="mdl-menu__item">
                                     <?php lang("share.toWeibo") ?>
@@ -244,13 +237,13 @@ $this->need('header.php'); ?>
                                 </div>
                                 <div id="post_entry-right-info" style="color:<?php $this->options->alinkcolor(); ?>">
                                     <span class="post_entry-category">
-                                        <?php $this->category(', '); ?> |
+                                        <?php $this->category(', '); ?><?php if ($this->options->commentis == '0' || (!getThemeOptions('SwitchToDisqusSince') == '' || !getThemeOptions('SwitchToDisqusSince') == null) && $this->cid < (int)getThemeOptions('SwitchToDisqusSince')): ?> |
                                     </span>
                                     <a href="<?php $this->permalink() ?>">
                                         <!-- Comment Count -->
                                         <?php $this->commentsNum('%d 评论'); ?>
                                     </a>
-
+                                    <?php endif ?>
                                 </div>
 
                             </div>

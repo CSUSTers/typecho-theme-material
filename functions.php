@@ -1,7 +1,7 @@
 <?php
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 
-define("MATERIAL_VERSION", "3.3.4");
+define("MATERIAL_VERSION", "3.4.0");
 
 require_once("lib/tools.php");
 require_once("lib/UACheck.php");
@@ -24,12 +24,12 @@ if (isset($_GET["mod"]) && isset($this) && $this->is('index')) {
         $this->need("page-search.php");
         exit;
     }
-    if ($_GET["mod"] === "expert") {
+    if ($_GET["mod"] === "export") {
         if ($_GET['type'] === 'comments') {
             if (Typecho_Widget::widget('Widget_User')->pass('administrator', true)) {
                 header("Content-Type: text/xml");
                 header('Content-Disposition: attachment; filename="'.Typecho_Widget::widget('Widget_Options')->title.'-comments-wxr-'.gmdate('Y-m-d').'.xml"');
-                $tool = new Comment_Expert();
+                $tool = new Comment_Export();
                 $db = Typecho_Db::get();
                 $query = $db->select('*')->from('table.contents')->where('type = ?', 'post')->orWhere('type = ?', 'page');
                 $result = $db->fetchAll($query);
@@ -138,10 +138,13 @@ function getTheme()
 
 /**
  * 获取当前的主题设置
- * @param string setting name
+ * @param null $setting
+ * @param bool $print
+ * @param null $default
  * @return mixed setting value
+ * @throws Typecho_Db_Exception
  */
-function getThemeOptions($setting = NULL, $print = false)
+function getThemeOptions($setting = null, $print = false, $default = null)
 {
     static $themeOptions = NULL;
     if ($themeOptions === NULL) {
@@ -150,8 +153,9 @@ function getThemeOptions($setting = NULL, $print = false)
         $result = $db->fetchAll($query);
         $themeOptions = unserialize($result[0]["value"]);
     }
-    if ($print) echo (isset($themeOptions[$setting])) ? $themeOptions[$setting] : NULL;
-    return ($setting === NULL) ? $themeOptions : (isset($themeOptions[$setting]) ? $themeOptions[$setting] : NULL);
+    $result = ($setting === NULL) ? $themeOptions : (isset($themeOptions[$setting]) ? $themeOptions[$setting] : $default);
+    if (is_string($result) && $print) echo $result;
+    return $result;
 }
 
 function themeInit($archive)
@@ -175,7 +179,7 @@ function themeInit($archive)
  */
 function getQRCode($permalink) {
     $qrcode = getThemeOptions("qrcode");
-    if ($qrcode === NULL) $qrcode = 0;
+    if ($qrcode === NULL) $qrcode = 1;
     $src = "";
     switch ($qrcode) {
         case 0:
@@ -207,41 +211,46 @@ function showThumbnail($widget)
     }
 
     //If article no include picture, display random default picture
-    $rand = rand(1, $widget->widget('Widget_Options')->RandomPicAmnt); //Random number
-
-    $random = getThemeFile('img/random/material-' . $rand . '.png');
-
-    // If only one random default picture, delete the following "//"
-    //$random = $widget->widget('Widget_Options')->themeUrl . '/img/random.jpg';
+    $result = randomThumbnail();
 
     $attach = $widget->attachments(1)->attachment;
-    $pattern = '/\<img.*?src\=\"(.*?)\"[^>]*>/i';
-    $patternlazy = '/\<img.*?data-original\=\"(.*?)\"[^>]*>/i';
-
-    if (preg_match_all($pattern, $widget->content, $thumbUrl)) {
-        return $thumbUrl[1][0];
-    } elseif (preg_match_all($patternlazy, $widget->content, $thumbUrl)) {
-        return $thumbUrl[1][0];
-    } elseif ($attach->isImage) {
-        return $attach->url;
-    } else {
-        return $random;
+    if (isset($attach) && $attach->isImage) {
+        $result = $attach->url;
     }
+
+    if (getThemeOptions("FetchFirstImageRegex", false, '0') == '0') {
+        global $t;
+        if (in_array("Lazyload", getThemeOptions("switch")) && method_exists($t,'is') && !$t->is('index')) {
+            if (preg_match_all('/\<img.*?data-original\=\"(.*?)\"[^>]*>/i', $widget->content, $thumbUrl)) {
+                $result = $thumbUrl[1][0];
+            }
+        } else {
+            if (preg_match_all('/\<img.*?src=\"(.*?)\"[^>]*>/i', $widget->content, $thumbUrl)) {
+                $result = $thumbUrl[1][0];
+            }
+        }
+    }
+
+    return $result;
 }
 
 /**
  * 随机缩略图
- * @param Typecho_Widget $widget
  * @return string image url
+ * @throws Typecho_Db_Exception
  */
-function randomThumbnail($widget)
+function randomThumbnail()
 {
-    //If article no include picture, display random default picture
-    $rand = rand(1, $widget->widget('Widget_Options')->RandomPicAmnt); //Random number
-
-    $random = getThemeFile('img/random/material-' . $rand . '.png');
-
-    return $random;
+    static $Last_Pic_Index = 0;
+    $rand = rand(1, getThemeOptions('RandomPicAmnt'));
+    $result = getThemeFile('img/random/material-' . $rand . '.png');
+    if(getThemeOptions('RandomPicAmnt') > 1){
+        if($Last_Pic_Index == $rand){
+            return randomThumbnail();
+        }
+        $Last_Pic_Index = $rand;
+    }
+    return $result;
 }
 
 /**

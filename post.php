@@ -93,11 +93,6 @@
                                 <?php lang("share.toTwitter") ?>
                                 </li>
                             </a>
-                            <a class="md-menu-list-a" href="https://plus.google.com/share?url=<?php $this->permalink(); ?>" onclick="javascript:window.open(this.href,'', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;">
-                                <li class="mdl-menu__item">
-                                <?php lang("share.toGplus") ?>
-                                </li>
-                            </a>
                             <a class="md-menu-list-a" href="http://service.weibo.com/share/share.php?appkey=&title=<?php $this->title(); ?>&url=<?php $this->permalink(); ?>&pic=&searchPic=false&style=simple ">
                                 <li class="mdl-menu__item">
                                 <?php lang("share.toWeibo") ?>
@@ -134,12 +129,6 @@
                     <?php include('comments.php'); ?>
 
                 </div>
-
-                <?php if (!empty($this->options->adsense)): ?>
-                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col" style="min-height: 100px!important;">
-                        <?php $this->options->adsense() ?>
-                    </div>
-                <?php endif; ?>
 
                 <!-- theNext thePrev button -->
                 <nav class="material-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
